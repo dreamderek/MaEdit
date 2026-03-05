@@ -1,0 +1,6 @@
+# Local frontend assets are not part of the GAS backend project.
+index.html
+client.js
+style.css
+README.md
+
