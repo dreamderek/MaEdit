@@ -1,32 +1,35 @@
 function repaint() {
-  var tmp = text.value;
 
-  tmp = tmp.replaceAll("\n", "</p><p>");
-  tmp = tmp.replace(/\\\[/gs, "\\\\(").replace(/\\\]/gs, "\\\\)");
-  tmp = tmp.replace(/\$\$/gs, "$");
+  tmp = text.value;
 
-  tmp = tmp.replace(/\$.+?\$/gs, function (s) {
-    return "\\\\(" + s.replace(/\$/gs, "") + "\\\\)";
-  });
-  tmp = tmp.replace(/\([A-E]\)/gs, function (e) { return "\n" + e + "&#9;"; }).replace(/(\n)\1+/gs, "\n");
-  tmp = tmp.replace(/\d+\\%/gs, function (e) { return "\\\\(" + e + "\\\\)"; });
+  tmp = tmp.replaceAll("<", " < ").replaceAll("\n", "</p><p>");
+  tmp = tmp.replace(/\\\[/gs, `\\\(`).replace(/\\\]/gs, `\\\)`);
+  tmp = tmp.replace(/\$\$/gs, `$`);
+
+  tmp = tmp.replace(/\$.+?\$/gs, s => { return `\\\(${s.replace(/\$/gs, ``)}\\\)`; });
+  tmp = tmp.replace(/\([A-E]\)/gs, e => { return `\n${e}&#9;` }).replace(/(\n)\1+/gs, `\n`);
+  tmp = tmp.replace(/\d+\\%/gs, e => { return `\\\(${e}\\\)` });
 
   tmp = test_begin(tmp);
 
-  tmp = tmp.replace(/[,¡A]/gs, ", ");
-  tmp = tmp.replace(/\?/gs, "¡H");
+  // tmp = tmp.replaceAll(" ", "&nbsp");
+
+  tmp = tmp.replace(/[,ï¼Œ]/gs, `, `);
+  tmp = tmp.replace(/\?/gs, `ï¼Ÿ`);
   tmp = tmp.replace(/\s+/g, " ");
   tmp = tmp.replace(/\t/g, "&#9;");
 
-  tmp = tmp.replace(/tabular/gs, "array");
-  tmp = tmp.replace(/\\\(.+?\\\)/gs, function (s) { return " <span class=\"math-tex\">" + s + "</span> "; });
-  tmp = tmp.replace(/`.+?`/gs, function (s) { return "<span class=\"math-tex\">" + s + "</span>"; });
-  tmp = tmp.replace(/<span class="math-tex".+?span>/g, function (e) { return e.replace(/<p>|<\/p>/gs, ""); });
+  tmp = tmp.replace(/tabular/gs, `array`);
+  tmp = tmp.replace(/\\\(.+?\\\)/gs, s => { return ` <span class="math-tex">${s}</span> `; });
+  tmp = tmp.replace(/`.+?`/gs, s => { return `<span class="math-tex">${s}</span>`; });
+  tmp = tmp.replace(/<span class="math-tex".+?span>/g, e => { return e.replace(/<p>|<\/p>/gs, ``); });
   tmp = tmp.replace(/\\displaystyle/gs, "");
-  tmp = tmp.replace(/\\\(/gs, "\\\\(\\displaystyle ");
+  tmp = tmp.replace(/\\\(/gs, "\\\(\\displaystyle ");
 
   tmp = "<p>" + tmp + "</p>";
+
   tmp = jump(tmp);
+
   reMix(tmp);
 }
 
