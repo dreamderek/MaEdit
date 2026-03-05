@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaEdit</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_HTMLorMML-full"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      extensions: ["tex2jax.js"],
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$","$"], ["\\(","\\)"]],
+        displayMath: [["$$","$$"], ["\\[","\\]"]],
+        processEscapes: true
+      },
+      "HTML-CSS": {
+        fonts: ["TeX"],
+        "fast-preview": true,
+        "eqnThreshold": 1000
+      }
+    });
+  </script>
+  <script>
+    window.MAEDIT_API_URL = "https://script.google.com/macros/s/AKfycbxQBNe209nkJsEM6txkcWERBbDfngNxBatnROKi1XWaVwrtZtUkhPrP6pt6b02xO-hT/exec";
+  </script>
+</head>
+<body>
+  <div class="buffing">TEST</div>
+  <div class="box">
+    <div class="div-main">
+      <table class="work-table">
+        <tr>
+          <td>
+            <textarea id="text" spellcheck="false"></textarea>
+          </td>
+          <td>
+            <div id="show"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="setlist" tabindex="0">
+      <dl id="list"></dl>
+    </div>
+
+    <div class="div-tool">
+      <a onclick="toggleSlide()">
+        <img src="https://lh3.googleusercontent.com/d/1l6SaYGFJgzbGv5K0RzpGPWk7Fd2ri-Ar" width="100%" alt="Menu">
+      </a>
+    </div>
+
+    <div class="div-top">
+      <table class="top-table">
+        <tr>
+          <td>MaEdit</td>
+          <td id="target"></td>
+          <td><a href="https://fixmath.com/zh-cn/source/index" target="_blank" style="font-size: 12px;">AsciiMath Docs</a></td>
+          <td><a href="https://docs.google.com/spreadsheets/d/1uXjjQVglhBXwqbxsJtMVg04SnUKJT9eDugphkODfdug/edit?gid=0#gid=0" target="_blank" style="font-size: 12px;">Question Sheet</a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <script src="./textMath.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>
