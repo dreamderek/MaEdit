@@ -28,7 +28,6 @@
   </script>
 </head>
 <body>
-  <div class="buffing">TEST</div>
   <div class="box">
     <div class="div-main">
       <table class="work-table">
@@ -48,7 +47,7 @@
     </div>
 
     <div class="div-tool">
-      <a onclick="toggleSlide()">
+      <a onclick="toggleSlide()" id="page">
         <img src="https://lh3.googleusercontent.com/d/1l6SaYGFJgzbGv5K0RzpGPWk7Fd2ri-Ar" width="100%" alt="Menu">
       </a>
     </div>
@@ -62,6 +61,17 @@
           <td><a href="https://docs.google.com/spreadsheets/d/1uXjjQVglhBXwqbxsJtMVg04SnUKJT9eDugphkODfdug/edit?gid=0#gid=0" target="_blank" style="font-size: 12px;">Question Sheet</a></td>
         </tr>
       </table>
+    </div>
+
+    <div id="rename-modal" class="rename-modal hidden" aria-hidden="true">
+      <div class="rename-modal-card" role="dialog" aria-modal="true" aria-labelledby="rename-modal-title">
+        <h3 id="rename-modal-title">確認改名</h3>
+        <p id="rename-modal-message"></p>
+        <div class="rename-modal-actions">
+          <button id="rename-confirm-btn" type="button">確定</button>
+          <button id="rename-cancel-btn" type="button">取消</button>
+        </div>
+      </div>
     </div>
   </div>
 

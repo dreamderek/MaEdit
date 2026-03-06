@@ -256,3 +256,58 @@
     background: #3ee;
     resize: none;
   }
+
+  .rename-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .rename-modal.hidden {
+    display: none;
+  }
+
+  .rename-modal-card {
+    width: min(420px, calc(100vw - 32px));
+    background: #fff;
+    color: #222;
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  }
+
+  .rename-modal-card h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+  }
+
+  .rename-modal-card p {
+    margin: 0;
+    white-space: pre-line;
+    line-height: 1.5;
+  }
+
+  .rename-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .rename-modal-actions button {
+    border: 1px solid #999;
+    background: #fff;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+  }
+
+  #rename-confirm-btn {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+  }

@@ -8,6 +8,14 @@ var buffing = document.querySelector(".buffing");
 var setlist = document.querySelector(".setlist");
 var dl = document.querySelector(".setlist dl");
 var target = document.querySelector("#target");
+var renameModal = document.querySelector("#rename-modal");
+var renameModalMessage = document.querySelector("#rename-modal-message");
+var renameConfirmBtn = document.querySelector("#rename-confirm-btn");
+var renameCancelBtn = document.querySelector("#rename-cancel-btn");
+var targetOriginalName = "";
+
+target.setAttribute("contenteditable", "true");
+target.setAttribute("spellcheck", "false");
 
 initData();
 
@@ -30,6 +38,24 @@ text.addEventListener("focus", function () {
   var tmp = document.querySelector(".action");
   if (tmp) toggleSlide();
 });
+
+target.addEventListener("focus", function () {
+  if (finger === "" || !data[finger]) {
+    target.blur();
+    return;
+  }
+  targetOriginalName = data[finger][title["question_bank"]] || "";
+  target.textContent = targetOriginalName;
+});
+
+target.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    target.blur();
+  }
+});
+
+target.addEventListener("blur", renameTarget);
 
 async function initData() {
   try {
@@ -129,7 +155,101 @@ function callfile() {
   finger = this.id;
   text.value = data[finger][title["question"]];
   target.textContent = data[finger][title["question_bank"]];
+  targetOriginalName = target.textContent;
   repaint();
   toggleSlide();
+}
+
+async function renameTarget() {
+  if (finger === "" || !data[finger]) return;
+
+  var oldName = targetOriginalName;
+  var newName = target.textContent.trim();
+
+  if (newName === oldName) {
+    target.textContent = oldName;
+    return;
+  }
+
+  if (newName === "") {
+    target.textContent = oldName;
+    return;
+  }
+
+  var ok = await confirmRenameDialog(oldName, newName);
+  if (!ok) {
+    target.textContent = oldName;
+    return;
+  }
+
+  data[finger][title["question_bank"]] = newName;
+  target.textContent = newName;
+  targetOriginalName = newName;
+
+  try {
+    if (typeof apiEditData === "function") {
+      await apiEditData(data[finger]);
+    }
+    syncTargetNameInList(finger, newName);
+  } catch (error) {
+    console.error("Failed to rename question bank:", error);
+    data[finger][title["question_bank"]] = oldName;
+    target.textContent = oldName;
+    targetOriginalName = oldName;
+    syncTargetNameInList(finger, oldName);
+  }
+}
+
+function syncTargetNameInList(index, name) {
+  var span = dl.querySelector('dt[id="' + index + '"] span');
+  if (span) span.textContent = name;
+}
+
+function confirmRenameDialog(oldName, newName) {
+  if (!renameModal || !renameModalMessage || !renameConfirmBtn || !renameCancelBtn) {
+    return Promise.resolve(window.confirm("是否確定改名？\n\n原名稱：" + oldName + "\n新名稱：" + newName));
+  }
+
+  renameModalMessage.textContent = "原名稱：" + oldName + "\n新名稱：" + newName;
+  renameModal.classList.remove("hidden");
+  renameModal.setAttribute("aria-hidden", "false");
+  renameConfirmBtn.focus();
+
+  return new Promise(function (resolve) {
+    function cleanup(result) {
+      renameModal.classList.add("hidden");
+      renameModal.setAttribute("aria-hidden", "true");
+      renameConfirmBtn.removeEventListener("click", onConfirm);
+      renameCancelBtn.removeEventListener("click", onCancel);
+      renameModal.removeEventListener("click", onBackdrop);
+      document.removeEventListener("keydown", onKeydown);
+      resolve(result);
+    }
+
+    function onConfirm() {
+      cleanup(true);
+    }
+
+    function onCancel() {
+      cleanup(false);
+    }
+
+    function onBackdrop(e) {
+      if (e.target === renameModal) {
+        cleanup(false);
+      }
+    }
+
+    function onKeydown(e) {
+      if (e.key === "Escape") {
+        cleanup(false);
+      }
+    }
+
+    renameConfirmBtn.addEventListener("click", onConfirm);
+    renameCancelBtn.addEventListener("click", onCancel);
+    renameModal.addEventListener("click", onBackdrop);
+    document.addEventListener("keydown", onKeydown);
+  });
 }
 
